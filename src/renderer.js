@@ -4,7 +4,7 @@ import { Background } from './background.js';
 import { Board, Dir } from './board.js';
 import { today } from './today.js';
 export class Renderer {
-    constructor() {
+    constructor(url) {
         this._canvasElm = this.elm("canvas");
         this._scene = new THREE.Scene();
         this._camera = new THREE.PerspectiveCamera(30, this._canvasElm.clientWidth / this._canvasElm.clientHeight, 0.1, 1000);
@@ -20,7 +20,7 @@ export class Renderer {
         this._controls.enableZoom = true;
         this._background = new Background();
         this._scene.add(this._background.scene());
-        this._board = new Board("https://brianchoi.net/b15/dist/1.jpg");
+        this._board = new Board(url);
         this._scene.add(this._board.scene());
         document.addEventListener("keydown", (e) => {
             let dir = Dir.UNKNOWN;

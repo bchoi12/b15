@@ -65,7 +65,7 @@ export class Piece {
 			const moveFrom = this._moveFrom.clone();
 			moveFrom.lerp(this._pos, weight);
 			this._mesh.position.copy(moveFrom);
-		} else if (ts < this._moveTime + 100) {
+		} else {
 			this._mesh.position.copy(this._pos);
 		}
 
@@ -110,14 +110,14 @@ export class Piece {
 			return;
 		}
 
+		this._weightFn = weightFn;
+		this._moveStart = Date.now();
+		this._moveTime = millis;
+
 		if (millis <= 0) {
 			this._mesh.position.copy(pos);
 			return;
 		}
-
-		this._weightFn = weightFn;
-		this._moveStart = Date.now();
-		this._moveTime = millis;
 	}
 
 	show() : void {

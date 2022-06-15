@@ -19,7 +19,7 @@ export class Renderer {
 	private _board : Board;
 	private _background : Background;
 
-	constructor() {
+	constructor(url : string) {
 		this._canvasElm = this.elm("canvas");
 		this._scene = new THREE.Scene();
 		this._camera = new THREE.PerspectiveCamera(30, this._canvasElm.clientWidth / this._canvasElm.clientHeight, 0.1, 1000);
@@ -38,7 +38,7 @@ export class Renderer {
 		this._background = new Background();
 		this._scene.add(this._background.scene());
 
-		this._board = new Board("https://brianchoi.net/b15/dist/1.jpg");
+		this._board = new Board(url);
 		this._scene.add(this._board.scene());
 
 		document.addEventListener("keydown", (e) => {
