@@ -237,10 +237,10 @@ export class Board {
 			}
 
 			for (let i = 0; i < this._board.length; ++i) {
-				const uMin = crop.topCrop.x / crop.topCrop.width;
-				const vMin = crop.topCrop.y / crop.topCrop.height;
-				const uMax = crop.topCrop.width / image.width;
-				const vMax = crop.topCrop.height / image.height;
+				const uMin = crop.topCrop.x / image.width;
+				const vMin = crop.topCrop.y / image.height;
+				const uMax = (crop.topCrop.x + crop.topCrop.width) / image.width;
+				const vMax = (crop.topCrop.y + crop.topCrop.height) / image.height;
 				const piece = this._pieces.get(i);
 
 				this.mapUV(this._board[i], uMin, uMax, vMin, vMax, piece.mesh().geometry);
