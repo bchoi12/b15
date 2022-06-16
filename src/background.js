@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
+import { Firework, Type } from './firework.js';
 import { today } from './today.js';
 export class Background {
     constructor() {
@@ -36,6 +37,7 @@ export class Background {
         }
         this.updateSky();
         this._fireworks = new Array();
+        this._victoryStarted = false;
     }
     scene() {
         return this._scene;
@@ -45,6 +47,18 @@ export class Background {
         this._fireworks.forEach((firework) => {
             firework.update();
         });
+    }
+    startVictory() {
+        if (this._victoryStarted) {
+            return;
+        }
+        this._victoryStarted = true;
+        for (const type of [Type.RED, Type.BLUE, Type.GREEN]) {
+            const firework = new Firework(type);
+            firework.enable();
+            this._fireworks.push(firework);
+            this._scene.add(firework.scene());
+        }
     }
     updateSky() {
         const night = today.isNight();

@@ -59,9 +59,12 @@ export class Renderer {
         this.animate();
     }
     animate() {
+        this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
         this._board.update();
         this._background.update();
-        this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
+        if (this._board.victory()) {
+            this._background.startVictory();
+        }
         this._renderer.render(this._scene, this._camera);
         this._controls.update();
         requestAnimationFrame(() => { this.animate(); });

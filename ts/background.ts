@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
 
-import { Firework } from './firework.js'
+import { Firework, Type } from './firework.js'
 import { today } from './today.js'
 
 export class Background {
@@ -13,6 +13,8 @@ export class Background {
 	private _sunLight : THREE.DirectionalLight;
 	private _spotLights : Array<THREE.SpotLight>;
 	private _fireworks : Array<Firework>;
+
+	private _victoryStarted : boolean;
 
 	constructor() {
 		this._scene = new THREE.Scene();
@@ -56,14 +58,8 @@ export class Background {
 
 		this.updateSky();
 
-
 		this._fireworks = new Array();
-/*
-		const firework = new Firework();
-		firework.enable();
-		this._fireworks.push(firework);
-		this._scene.add(firework.mesh());
-*/
+		this._victoryStarted = false;
 	}
 
 	scene() : THREE.Scene {
@@ -76,6 +72,21 @@ export class Background {
 		this._fireworks.forEach((firework) => {
 			firework.update();
 		});
+	}
+
+	startVictory() {
+		if (this._victoryStarted) {
+			return;
+		}
+
+		this._victoryStarted = true;
+
+		for (const type of [Type.RED, Type.BLUE, Type.GREEN]) {
+			const firework = new Firework(type);
+			firework.enable();
+			this._fireworks.push(firework);
+			this._scene.add(firework.scene());
+		}
 	}
 
 	private updateSky() {

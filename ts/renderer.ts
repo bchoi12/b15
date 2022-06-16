@@ -31,8 +31,8 @@ export class Renderer {
 		this._renderer.shadowMap.enabled = true;
 		this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-		this._controls.enableRotate = false;
-		this._controls.enablePan = false;
+		this._controls.enableRotate = false; // location.hostname === "localhost" ? true : false;
+		this._controls.enablePan = false; // location.hostname === "localhost" ? true : false;
 		this._controls.enableZoom = true;
 
 		this._background = new Background();
@@ -83,9 +83,14 @@ export class Renderer {
 	}
 
 	private animate() : void {
+		this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
 		this._board.update();
 		this._background.update();
-		this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
+
+		if (this._board.victory()) {
+			this._background.startVictory();
+		}
+
 		this._renderer.render(this._scene, this._camera);
 		this._controls.update();
 		requestAnimationFrame(() => { this.animate(); });
