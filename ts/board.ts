@@ -252,7 +252,8 @@ export class Board {
 
 			for (let i = 0; i < this._board.length; ++i) {
 				setTimeout(() => {
-					this._pieces.get(this._board.length - i).move(this.getPos(this._board.length - i), 800, (x) => {return -x * x + 2 * x});
+					const backwardsIndex = this._board.length - i - 1;
+					this._pieces.get(backwardsIndex).move(this.getPos(backwardsIndex), 800, (x) => {return -x * x + 2 * x});
 
 					if (i === this._board.length - 1) {
 						setTimeout(() => {
