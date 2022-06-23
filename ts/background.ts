@@ -2,9 +2,12 @@ import * as THREE from 'three'
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
 
 import { Firework, Type } from './firework.js'
+import { Range } from './range.js'
 import { today } from './today.js'
 
 export class Background {
+	private readonly _sunAngle = new Range(Math.PI / 2, 17 * Math.PI / 40);
+
 	private _scene : THREE.Scene;
 
 	private _sky : Sky;
@@ -13,7 +16,9 @@ export class Background {
 	private _sunLight : THREE.DirectionalLight;
 	private _spotLights : Array<THREE.SpotLight>;
 	private _fireworks : Array<Firework>;
+	private _ground : THREE.Mesh;
 
+	private _updateCount : number;
 	private _victoryStarted : boolean;
 
 	constructor() {
@@ -57,8 +62,14 @@ export class Background {
 		}
 
 		this.updateSky();
-
 		this._fireworks = new Array();
+
+		this._ground = new THREE.Mesh(new THREE.BoxGeometry(20, 6, 20), new THREE.MeshStandardMaterial({color : 0x777777}));
+		this._ground.position.y -= (6 + 3);
+		this._ground.receiveShadow = true;
+		this._scene.add(this._ground);
+
+		this._updateCount = 0;
 		this._victoryStarted = false;
 	}
 
@@ -67,11 +78,15 @@ export class Background {
 	}
 
 	update() : void {
-		this.updateSky();
+		if (this._updateCount % 60 === 0) {
+			this.updateSky();
+		}
 
 		this._fireworks.forEach((firework) => {
 			firework.update();
 		});
+
+		this._updateCount++;
 	}
 
 	startVictory() {
@@ -81,8 +96,8 @@ export class Background {
 
 		this._victoryStarted = true;
 
-		for (const type of [Type.RED, Type.BLUE, Type.GREEN]) {
-			const firework = new Firework(type);
+		for (let i = 0; i < 6; ++i) {
+			const firework = new Firework();
 			firework.enable();
 			this._fireworks.push(firework);
 			this._scene.add(firework.scene());
@@ -112,13 +127,19 @@ export class Background {
 	}
 
 	private sunAngle() : number {
-		if (today.isNight()) {
-			return 4 * Math.PI / 9;
+		const hours = today.currentHours();
+		const minutes = new Date().getMinutes();
+
+		const start = today.isNight() ? today.sunset() : today.sunrise();
+
+		let hoursElapsed = hours - start;
+		if (hoursElapsed < 0) {
+			hoursElapsed += 24;
 		}
 
-		const hours = today.currentHours();
-		const minutesSinceSunrise = 60 * (hours - today.sunrise()) + new Date().getMinutes();
-		const percent = minutesSinceSunrise / ((today.sunset() - today.sunrise())* 60);
-		return Math.PI / 2 * 2 * Math.abs(0.5 - percent);
+		let percent = (60 * hoursElapsed + minutes) / (60 * (today.isNight() ? today.moonHours() : today.sunHours()));
+
+		percent = 1 - 2 * Math.abs(0.5 - percent);
+		return this._sunAngle.lerp(percent);
 	}
 }

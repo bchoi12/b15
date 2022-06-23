@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 
+import { purple } from './purple.js'
 import { Range } from './range.js'
 
 export enum Type {
@@ -20,6 +21,7 @@ enum State {
 export class Firework {
 	private readonly _materialSize = 0.8;
 
+	private readonly _points = new Range(150, 180);
 	private readonly _rangeX = new Range(-6, 6);
 	private readonly _startY = new Range(-16, -15);
 	private readonly _endY = new Range(12, 16);
@@ -30,9 +32,9 @@ export class Firework {
 	private readonly _equatorAngle = new Range(0, 2 * Math.PI);
 	private readonly _phiAngle = new Range(-Math.PI, Math.PI);
 
-	private readonly _waitingTime = new Range(300, 1200);
-	private readonly _launchTime = new Range(1400, 1600);
-	private readonly _explodeTime = new Range(1000, 1200);
+	private readonly _waitingTime = new Range(300, 1500);
+	private readonly _launchTime = new Range(1500, 1800);
+	private readonly _explodeTime = new Range(1000, 1500);
 
 	private _scene : THREE.Scene;
 	private _explosion : THREE.Mesh;
@@ -41,34 +43,21 @@ export class Firework {
 	private _startPos : THREE.Vector3;
 	private _endPos : THREE.Vector3;
 
-	private _type : Type;
 	private _color : THREE.Color;
 	private _state : State;
 	private _stateStarted : Map<State, number>;
 	private _stateDuration : Map<State, number>;
 
-	constructor(type : Type) {
+	constructor() {
 		this._scene = new THREE.Scene();
-		this._type = type;
-		switch (this._type) {
-			case Type.RED:
-				this._color = new THREE.Color(1, 0, 0);
-				break;
-			case Type.GREEN:
-				this._color = new THREE.Color(0, 1, 0);
-				break;
-			case Type.BLUE:
-				this._color = new THREE.Color(0, 0, 1);
-				break;
-			default:
-				this._color = new THREE.Color(1, 1, 1);
-		}
+		this._color = purple.random().color;
 
 		let geometry = new THREE.BufferGeometry();
 		let points = [];
 		let colors = [];
 
-		for (let i = 0; i < 150; ++i) {
+		let numPoints = this._points.random();
+		for (let i = 0; i < numPoints; ++i) {
 			const pos = new THREE.Vector3();
 			pos.setFromSphericalCoords(1, this._equatorAngle.random(), this._phiAngle.random());
 

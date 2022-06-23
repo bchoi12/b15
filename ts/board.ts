@@ -13,7 +13,7 @@ export enum Dir {
 }
 
 export class Board {
-	private readonly _shuffleMoves : number = 200;
+	private readonly _shuffleMoves : number = 250;
 	private readonly _boardLength : number = 4;
 	private readonly _pieceSize : number = 3;
 
@@ -252,7 +252,7 @@ export class Board {
 
 			for (let i = 0; i < this._board.length; ++i) {
 				setTimeout(() => {
-					this._pieces.get(this._board[i]).move(this.getPos(this._board[i]), 800, (x) => {return -x * x + 2 * x});
+					this._pieces.get(this._board.length - i).move(this.getPos(this._board.length - i), 800, (x) => {return -x * x + 2 * x});
 
 					if (i === this._board.length - 1) {
 						setTimeout(() => {

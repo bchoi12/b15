@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { purple } from './purple.js';
 import { Range } from './range.js';
 export var Type;
 (function (Type) {
@@ -16,8 +17,9 @@ var State;
     State[State["EXPLODING"] = 4] = "EXPLODING";
 })(State || (State = {}));
 export class Firework {
-    constructor(type) {
+    constructor() {
         this._materialSize = 0.8;
+        this._points = new Range(150, 180);
         this._rangeX = new Range(-6, 6);
         this._startY = new Range(-16, -15);
         this._endY = new Range(12, 16);
@@ -27,28 +29,16 @@ export class Firework {
         this._lightIntensity = new Range(0, 2);
         this._equatorAngle = new Range(0, 2 * Math.PI);
         this._phiAngle = new Range(-Math.PI, Math.PI);
-        this._waitingTime = new Range(300, 1200);
-        this._launchTime = new Range(1400, 1600);
-        this._explodeTime = new Range(1000, 1200);
+        this._waitingTime = new Range(300, 1500);
+        this._launchTime = new Range(1500, 1800);
+        this._explodeTime = new Range(1000, 1500);
         this._scene = new THREE.Scene();
-        this._type = type;
-        switch (this._type) {
-            case Type.RED:
-                this._color = new THREE.Color(1, 0, 0);
-                break;
-            case Type.GREEN:
-                this._color = new THREE.Color(0, 1, 0);
-                break;
-            case Type.BLUE:
-                this._color = new THREE.Color(0, 0, 1);
-                break;
-            default:
-                this._color = new THREE.Color(1, 1, 1);
-        }
+        this._color = purple.random().color;
         let geometry = new THREE.BufferGeometry();
         let points = [];
         let colors = [];
-        for (let i = 0; i < 150; ++i) {
+        let numPoints = this._points.random();
+        for (let i = 0; i < numPoints; ++i) {
             const pos = new THREE.Vector3();
             pos.setFromSphericalCoords(1, this._equatorAngle.random(), this._phiAngle.random());
             points.push(pos.x);

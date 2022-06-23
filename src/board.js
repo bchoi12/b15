@@ -12,7 +12,7 @@ export var Dir;
 })(Dir || (Dir = {}));
 export class Board {
     constructor(url) {
-        this._shuffleMoves = 200;
+        this._shuffleMoves = 250;
         this._boardLength = 4;
         this._pieceSize = 3;
         this._boardSize = this._boardLength * this._boardLength;
@@ -212,7 +212,7 @@ export class Board {
             }
             for (let i = 0; i < this._board.length; ++i) {
                 setTimeout(() => {
-                    this._pieces.get(this._board[i]).move(this.getPos(this._board[i]), 800, (x) => { return -x * x + 2 * x; });
+                    this._pieces.get(this._board.length - i).move(this.getPos(this._board.length - i), 800, (x) => { return -x * x + 2 * x; });
                     if (i === this._board.length - 1) {
                         setTimeout(() => {
                             this._loaded = true;

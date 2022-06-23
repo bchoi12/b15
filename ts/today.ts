@@ -16,6 +16,14 @@ class Today {
 		return this._sunrise;
 	}
 
+	sunHours() : number {
+		return this._sunset - this._sunrise;
+	}
+
+	moonHours() : number {
+		return 24 - this.sunHours();
+	}
+
 	sunset() : number {
 		return this._sunset;
 	}
