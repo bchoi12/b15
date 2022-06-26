@@ -11,7 +11,7 @@ export var Dir;
     Dir[Dir["RIGHT"] = 4] = "RIGHT";
 })(Dir || (Dir = {}));
 export class Board {
-    constructor(url) {
+    constructor() {
         this._shuffleMoves = 250;
         this._boardLength = 4;
         this._pieceSize = 3;
@@ -21,6 +21,8 @@ export class Board {
         this._emptyIndex = this._emptyValue;
         this._pieces = new Map();
         this._scene = new THREE.Scene();
+    }
+    loadUrl(url) {
         this._textureUrl = url;
         this._victory = false;
         this._loaded = false;
@@ -206,9 +208,6 @@ export class Board {
                 const vMax = (crop.topCrop.y + crop.topCrop.height) / image.height;
                 const piece = this._pieces.get(i);
                 this.mapUV(this._board[i], uMin, uMax, vMin, vMax, piece.mesh().geometry);
-                if (this._board[i] === this._emptyValue) {
-                    piece.hide();
-                }
             }
             for (let i = 0; i < this._board.length; ++i) {
                 setTimeout(() => {
@@ -216,8 +215,11 @@ export class Board {
                     this._pieces.get(backwardsIndex).move(this.getPos(backwardsIndex), 800, (x) => { return -x * x + 2 * x; });
                     if (i === this._board.length - 1) {
                         setTimeout(() => {
-                            this._loaded = true;
-                            this.postMove();
+                            this._pieces.get(this._emptyIndex).hide();
+                            setTimeout(() => {
+                                this._loaded = true;
+                                this.postMove();
+                            }, 1000);
                         }, 800);
                     }
                 }, 150 * i);

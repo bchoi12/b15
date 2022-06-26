@@ -20,7 +20,8 @@ export class Renderer {
         this._controls.enableZoom = true;
         this._background = new Background();
         this._scene.add(this._background.scene());
-        this._board = new Board(url);
+        this._board = new Board();
+        this._board.loadUrl(url);
         this._scene.add(this._board.scene());
         document.addEventListener("keydown", (e) => {
             let dir = Dir.UNKNOWN;

@@ -138,8 +138,12 @@ export class Background {
 		}
 
 		let percent = (60 * hoursElapsed + minutes) / (60 * (today.isNight() ? today.moonHours() : today.sunHours()));
-
 		percent = 1 - 2 * Math.abs(0.5 - percent);
+
+		if (today.isNight()) {
+			percent = 1 - percent;
+		}
+
 		return this._sunAngle.lerp(percent);
 	}
 }

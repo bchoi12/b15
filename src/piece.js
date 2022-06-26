@@ -4,7 +4,7 @@ export class Piece {
     constructor(texture, size) {
         this._size = size;
         this._sizeZ = size;
-        const material = new THREE.MeshStandardMaterial({ map: texture });
+        const material = new THREE.MeshStandardMaterial({ map: texture, transparent: true });
         const geometry = new THREE.PlaneGeometry(size, size);
         this._mesh = new THREE.Mesh(geometry, material);
         this._mesh.castShadow = true;
@@ -16,7 +16,7 @@ export class Piece {
         this._jiggle = false;
         this._jiggleDir = 1;
         this._stopJiggle = 0;
-        this._show = false;
+        this._show = true;
         this.addSides();
     }
     update() {
@@ -49,6 +49,9 @@ export class Piece {
         if (this._show && this._mesh.material.opacity < 1) {
             this._mesh.material.opacity += 0.01;
         }
+        else if (!this._show && this._mesh.material.opacity > 0) {
+            this._mesh.material.opacity -= 0.02;
+        }
     }
     mesh() {
         return this._mesh;
@@ -72,13 +75,11 @@ export class Piece {
         }
     }
     show() {
-        this._mesh.visible = true;
         this._show = true;
     }
     hide() {
-        this._mesh.visible = false;
         this._mesh.material.transparent = true;
-        this._mesh.material.opacity = 0;
+        this._show = false;
     }
     addSides() {
         const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });

@@ -29,11 +29,14 @@ export class Board {
 	private _victory : boolean;
 	private _loaded : boolean;
 
-	constructor(url : string) {
+	constructor() {
 		this._board = new Array();
 		this._emptyIndex = this._emptyValue;
 		this._pieces = new Map();
 		this._scene = new THREE.Scene();
+	}
+
+	loadUrl(url : string) {
 		this._textureUrl = url;
 		this._victory = false;
 		this._loaded = false;
@@ -244,10 +247,6 @@ export class Board {
 				const piece = this._pieces.get(i);
 
 				this.mapUV(this._board[i], uMin, uMax, vMin, vMax, piece.mesh().geometry);
-
-				if (this._board[i] === this._emptyValue) {
-					piece.hide();
-				}
 			}
 
 			for (let i = 0; i < this._board.length; ++i) {
@@ -257,8 +256,11 @@ export class Board {
 
 					if (i === this._board.length - 1) {
 						setTimeout(() => {
-							this._loaded = true;
-							this.postMove();
+							this._pieces.get(this._emptyIndex).hide();
+							setTimeout(() => {
+								this._loaded = true;
+								this.postMove();
+							}, 1000);
 						}, 800);
 					}
 				}, 150 * i)
