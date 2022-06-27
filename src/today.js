@@ -3,8 +3,16 @@ class Today {
         this._sunrise = 6;
         this._sunset = 20;
         this._oneDay = 1000 * 60 * 60 * 24;
-        this._now = new Date();
         this._seed = this.currentDay();
+    }
+    textDate() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        return month + "/" + day;
+    }
+    imageFile() {
+        return this.textDate() + ".jpg";
     }
     sunrise() {
         return this._sunrise;
@@ -26,8 +34,9 @@ class Today {
         return new Date().getHours();
     }
     currentDay() {
-        const start = new Date(this._now.getFullYear(), 0, 0);
-        const diff = (this._now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - this._now.getTimezoneOffset()) * 60 * 1000);
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = (now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
         return Math.floor(diff / this._oneDay);
     }
     tomorrow() {

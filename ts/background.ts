@@ -1,7 +1,10 @@
 import * as THREE from 'three'
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 import { Firework, Type } from './firework.js'
+import { purple } from './purple.js'
 import { Range } from './range.js'
 import { today } from './today.js'
 
@@ -69,6 +72,43 @@ export class Background {
 		this._ground.receiveShadow = true;
 		this._scene.add(this._ground);
 
+		const loader = new FontLoader();
+		loader.load('./helvetiker_bold.typeface.json', (response) => {
+			console.log(response);
+			const font = response;
+
+			const geometry = new TextGeometry(today.textDate(), {
+					font: font,
+					size: 3,
+					height: 1,
+					curveSegments: 12,
+					bevelEnabled: true,
+					bevelThickness: 0.1,
+					bevelSize: 0.1,
+					bevelOffset: 0,
+					bevelSegments: 6
+				});
+
+			const mesh = new THREE.Mesh(geometry, purple.random());
+			mesh.castShadow = true;
+			let size = new THREE.Vector3();
+			const bbox = new THREE.Box3().setFromObject(mesh);
+			bbox.getSize(size);
+
+			mesh.position.x -= size.x / 2;
+			mesh.position.z = 10;
+			mesh.position.y = this._ground.position.y - 3 + size.y / 2;
+
+			const pointLight = new THREE.PointLight(0xdddddd, 0.8, 30);
+			pointLight.position.x = mesh.position.x;
+			pointLight.position.y = mesh.position.y;
+			pointLight.position.z = mesh.position.z + 10;
+			pointLight.lookAt(0, 0, 0);
+			this._scene.add(pointLight);
+
+			this._scene.add(mesh);
+		});
+
 		this._updateCount = 0;
 		this._victoryStarted = false;
 	}
@@ -109,7 +149,7 @@ export class Background {
 
 		let uniforms = this._sky.material.uniforms;
 		uniforms['turbidity'].value = 1;
-		uniforms['rayleigh'].value = 1.0;
+		uniforms['rayleigh'].value = 1.3;
 		uniforms['mieCoefficient'].value = 0.1;
 		uniforms['mieDirectionalG'].value = night ? 1 : 0.9999;
 		this._sunPos.setFromSphericalCoords(1, this.sunAngle(), 0.97 * Math.PI);

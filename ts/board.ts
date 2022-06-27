@@ -13,6 +13,8 @@ export enum Dir {
 }
 
 export class Board {
+	private readonly _baseUrl = "https://raw.githubusercontent.com/bchoi12/img_server/main/"
+
 	private readonly _shuffleMoves : number = 250;
 	private readonly _boardLength : number = 4;
 	private readonly _pieceSize : number = 3;
@@ -34,10 +36,12 @@ export class Board {
 		this._emptyIndex = this._emptyValue;
 		this._pieces = new Map();
 		this._scene = new THREE.Scene();
+
+		this.load();
 	}
 
-	loadUrl(url : string) {
-		this._textureUrl = url;
+	load() {
+		this._textureUrl = this._baseUrl + today.imageFile();
 		this._victory = false;
 		this._loaded = false;
 

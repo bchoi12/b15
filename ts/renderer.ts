@@ -19,7 +19,7 @@ export class Renderer {
 	private _board : Board;
 	private _background : Background;
 
-	constructor(url : string) {
+	constructor() {
 		this._canvasElm = this.elm("canvas");
 		this._scene = new THREE.Scene();
 		this._camera = new THREE.PerspectiveCamera(30, this._canvasElm.clientWidth / this._canvasElm.clientHeight, 0.1, 1000);
@@ -31,15 +31,14 @@ export class Renderer {
 		this._renderer.shadowMap.enabled = true;
 		this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-		this._controls.enableRotate = false; // location.hostname === "localhost" ? true : false;
-		this._controls.enablePan = false; // location.hostname === "localhost" ? true : false;
+		this._controls.enableRotate =  location.hostname === "localhost" ? true : false;
+		this._controls.enablePan =  location.hostname === "localhost" ? true : false;
 		this._controls.enableZoom = true;
 
 		this._background = new Background();
 		this._scene.add(this._background.scene());
 
 		this._board = new Board();
-		this._board.loadUrl(url);
 		this._scene.add(this._board.scene());
 
 		document.addEventListener("keydown", (e) => {

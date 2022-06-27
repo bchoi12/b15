@@ -4,12 +4,30 @@ class Today {
 	private readonly _sunset = 20;
 	private readonly _oneDay = 1000 * 60 * 60 * 24;
 
-	private _now : Date;
 	private _seed : number;
 
 	constructor() {
-		this._now = new Date();
 		this._seed = this.currentDay();
+	}
+
+	textDate() : string {
+		const now = new Date();
+
+		// bless javascript
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+		return month + "/" + day;
+	}
+
+	imageFile() : string {
+		/*
+		let debug = true;
+		if (debug) {
+			return "12/21.jpg";
+		}
+		*/
+
+		return this.textDate() + ".jpg";
 	}
 
 	sunrise() : number {
@@ -38,8 +56,9 @@ class Today {
 	}
 
 	currentDay() : number {
-		const start = new Date(this._now.getFullYear(), 0, 0);
-		const diff = (this._now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - this._now.getTimezoneOffset()) * 60 * 1000);
+		const now = new Date();
+		const start = new Date(now.getFullYear(), 0, 0);
+		const diff = (now.getTime() - start.getTime()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
 		
 		return Math.floor(diff / this._oneDay);
 	}

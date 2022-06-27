@@ -12,6 +12,7 @@ export var Dir;
 })(Dir || (Dir = {}));
 export class Board {
     constructor() {
+        this._baseUrl = "https://raw.githubusercontent.com/bchoi12/img_server/main/";
         this._shuffleMoves = 250;
         this._boardLength = 4;
         this._pieceSize = 3;
@@ -21,9 +22,10 @@ export class Board {
         this._emptyIndex = this._emptyValue;
         this._pieces = new Map();
         this._scene = new THREE.Scene();
+        this.load();
     }
-    loadUrl(url) {
-        this._textureUrl = url;
+    load() {
+        this._textureUrl = this._baseUrl + today.imageFile();
         this._victory = false;
         this._loaded = false;
         const board = this.getBoard();

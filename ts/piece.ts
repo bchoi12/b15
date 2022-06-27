@@ -73,11 +73,18 @@ export class Piece {
 			}
 		}
 
-		if (this._show && this._mesh.material.opacity < 1) {
-			this._mesh.material.opacity += 0.01;
-		} else if (!this._show && this._mesh.material.opacity > 0) {
-			this._mesh.material.opacity -= 0.02;
-		}
+		if (this._show) {
+			this._mesh.visible = true;
+			if (this._mesh.material.opacity < 1) {
+				this._mesh.material.opacity += 0.01;
+			}
+		} else {
+			if (this._mesh.material.opacity > 0) {
+				this._mesh.material.opacity -= 0.02;
+			} else {
+				this._mesh.visible = false;
+			}
+		} 
 	}
 
 	mesh() : THREE.Mesh {
