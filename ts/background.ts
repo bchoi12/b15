@@ -74,7 +74,6 @@ export class Background {
 
 		const loader = new FontLoader();
 		loader.load('./helvetiker_bold.typeface.json', (response) => {
-			console.log(response);
 			const font = response;
 
 			const geometry = new TextGeometry(today.textDate(), {

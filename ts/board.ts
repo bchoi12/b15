@@ -51,6 +51,11 @@ export class Board {
 				this._board.push(Number(board[i]));
 			}
 		} else {
+			const overlay = document.getElementById("div-overlay");
+			overlay.style.display = "block";
+			overlay.onclick = () => {
+				overlay.style.display = "none";
+			};
 			for (let i = 0 ; i < this._boardSize; ++i) {
 				this._board.push(i);
 			}
