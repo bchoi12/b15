@@ -10,6 +10,7 @@ html, body {
 }
 
 #div-overlay {
+	display: none;
 	position: fixed;
 	top: 15%;
 	left: 15%;
