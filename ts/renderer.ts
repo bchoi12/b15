@@ -22,8 +22,8 @@ export class Renderer {
 	constructor() {
 		this._canvasElm = this.elm("canvas");
 		this._scene = new THREE.Scene();
-		this._camera = new THREE.PerspectiveCamera(30, this._canvasElm.clientWidth / this._canvasElm.clientHeight, 0.1, 1000);
-		this._camera.position.copy(new THREE.Vector3(0, 0, 45));
+		this._camera = new THREE.PerspectiveCamera(40, this._canvasElm.clientWidth / this._canvasElm.clientHeight, 0.1, 1000);
+		this._camera.position.copy(new THREE.Vector3(0, 0, 42.5));
 		this._camera.lookAt(new THREE.Vector3(0, 0, 0));
 		
 		this._renderer = new THREE.WebGLRenderer({canvas: this._canvasElm, antialias: true});
@@ -34,7 +34,7 @@ export class Renderer {
 		this._controls = new OrbitControls(this._camera, this._renderer.domElement);
 		this._controls.enableRotate =  false; // location.hostname === "localhost" ? true : false;
 		this._controls.enablePan =  false; // location.hostname === "localhost" ? true : false;
-		this._controls.enableZoom = false; // true;
+		this._controls.enableZoom = true;
 
 		this._background = new Background();
 		this._scene.add(this._background.scene());
