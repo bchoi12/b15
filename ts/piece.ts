@@ -76,11 +76,11 @@ export class Piece {
 		if (this._show) {
 			this._mesh.visible = true;
 			if (this._mesh.material.opacity < 1) {
-				this._mesh.material.opacity += 0.01;
+				this._mesh.material.opacity += 0.02;
 			}
 		} else {
 			if (this._mesh.material.opacity > 0) {
-				this._mesh.material.opacity -= 0.02;
+				this._mesh.material.opacity -= 0.04;
 			} else {
 				this._mesh.visible = false;
 			}

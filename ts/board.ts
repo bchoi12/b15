@@ -53,8 +53,9 @@ export class Board {
 		} else {
 			const overlay = document.getElementById("div-overlay");
 			overlay.style.display = "block";
-			overlay.onclick = () => {
+			overlay.onclick = (e) => {
 				overlay.style.display = "none";
+				e.stopPropagation();
 			};
 			for (let i = 0 ; i < this._boardSize; ++i) {
 				this._board.push(i);
@@ -265,10 +266,12 @@ export class Board {
 
 					if (i === this._board.length - 1) {
 						setTimeout(() => {
-							this._pieces.get(this._emptyIndex).hide();
 							setTimeout(() => {
-								this._loaded = true;
 								this.postMove();
+								if (!this.victory()) {
+									this._pieces.get(this._emptyIndex).hide();
+								}
+								this._loaded = true;
 							}, 1000);
 						}, 800);
 					}

@@ -28,12 +28,13 @@ export class Renderer {
 		
 		this._renderer = new THREE.WebGLRenderer({canvas: this._canvasElm, antialias: true});
 		this._renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
 		this._renderer.shadowMap.enabled = true;
 		this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-		this._controls.enableRotate =  location.hostname === "localhost" ? true : false;
-		this._controls.enablePan =  location.hostname === "localhost" ? true : false;
-		this._controls.enableZoom = true;
+		this._controls.enableRotate =  false; // location.hostname === "localhost" ? true : false;
+		this._controls.enablePan =  false; // location.hostname === "localhost" ? true : false;
+		this._controls.enableZoom = false; // true;
 
 		this._background = new Background();
 		this._scene.add(this._background.scene());
@@ -83,7 +84,6 @@ export class Renderer {
 	}
 
 	private animate() : void {
-		this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
 		this._board.update();
 		this._background.update();
 

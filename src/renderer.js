@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Background } from './background.js';
 import { Board, Dir } from './board.js';
-import { today } from './today.js';
 export class Renderer {
     constructor() {
         this._canvasElm = this.elm("canvas");
@@ -15,9 +14,9 @@ export class Renderer {
         this._renderer.shadowMap.enabled = true;
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-        this._controls.enableRotate = location.hostname === "localhost" ? true : false;
-        this._controls.enablePan = location.hostname === "localhost" ? true : false;
-        this._controls.enableZoom = true;
+        this._controls.enableRotate = false;
+        this._controls.enablePan = false;
+        this._controls.enableZoom = false;
         this._background = new Background();
         this._scene.add(this._background.scene());
         this._board = new Board();
@@ -59,7 +58,6 @@ export class Renderer {
         this.animate();
     }
     animate() {
-        this._renderer.toneMappingExposure = today.isNight() ? 0.4 : 1.0;
         this._board.update();
         this._background.update();
         if (this._board.victory()) {

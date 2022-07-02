@@ -3,17 +3,19 @@ import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { Firework } from './firework.js';
-import { purple } from './purple.js';
 import { Range } from './range.js';
 import { today } from './today.js';
 export class Background {
     constructor() {
         this._sunAngle = new Range(Math.PI / 2, 17 * Math.PI / 40);
         this._scene = new THREE.Scene();
+        this._scene.fog = new THREE.Fog(0xffffff, 0.1, 50);
+        console.log(this._scene);
         this._sky = new Sky();
         this._sky.scale.setScalar(4000);
         this._sunPos = new THREE.Vector3();
         this._scene.add(this._sky);
+        this._sky.material.uniforms["up"].value = new THREE.Vector3(0, 0.995, -0.1);
         this._hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x565656, 1.2);
         this._scene.add(this._hemisphereLight);
         this._sunLight = new THREE.DirectionalLight(0xfdfbfd, 2.0);
@@ -42,9 +44,10 @@ export class Background {
         }
         this.updateSky();
         this._fireworks = new Array();
-        this._ground = new THREE.Mesh(new THREE.BoxGeometry(20, 6, 20), new THREE.MeshStandardMaterial({ color: 0x777777 }));
+        this._ground = new THREE.Mesh(new THREE.BoxGeometry(16, 6, 8), new THREE.MeshStandardMaterial({ color: 0x673147 }));
         this._ground.position.y -= (6 + 3);
         this._ground.receiveShadow = true;
+        this._ground.position.z -= 1.5;
         this._scene.add(this._ground);
         const loader = new FontLoader();
         loader.load('./helvetiker_bold.typeface.json', (response) => {
@@ -60,14 +63,14 @@ export class Background {
                 bevelOffset: 0,
                 bevelSegments: 6
             });
-            const mesh = new THREE.Mesh(geometry, purple.random());
+            const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: today.color() }));
             mesh.castShadow = true;
             let size = new THREE.Vector3();
             const bbox = new THREE.Box3().setFromObject(mesh);
             bbox.getSize(size);
             mesh.position.x -= size.x / 2;
-            mesh.position.z = 10;
             mesh.position.y = this._ground.position.y - 3 + size.y / 2;
+            mesh.position.z = 4 - 1.5;
             const pointLight = new THREE.PointLight(0xdddddd, 0.8, 30);
             pointLight.position.x = mesh.position.x;
             pointLight.position.y = mesh.position.y;
@@ -105,11 +108,12 @@ export class Background {
     }
     updateSky() {
         const night = today.isNight();
+        const sunset = today.isSunset();
         let uniforms = this._sky.material.uniforms;
-        uniforms['turbidity'].value = 1;
-        uniforms['rayleigh'].value = 1.3;
-        uniforms['mieCoefficient'].value = 0.1;
-        uniforms['mieDirectionalG'].value = night ? 1 : 0.9999;
+        uniforms['turbidity'].value = 20;
+        uniforms['rayleigh'].value = sunset ? 1 : 0.3;
+        uniforms['mieCoefficient'].value = night ? 0.05 : 0.001;
+        uniforms['mieDirectionalG'].value = night ? 1 : sunset ? 0.999 : 0.9999;
         this._sunPos.setFromSphericalCoords(1, this.sunAngle(), 0.97 * Math.PI);
         uniforms['sunPosition'].value.copy(this._sunPos);
         const sunLightOffset = uniforms['sunPosition'].value.clone();
@@ -117,7 +121,7 @@ export class Background {
         this._sunLight.position.copy(sunLightOffset);
         this._sunLight.intensity = today.isNight() ? 0.3 : 2.0;
         this._spotLights.forEach((spotLight) => {
-            spotLight.intensity = today.isNight() ? 2.0 : 0.3;
+            spotLight.intensity = today.isNight() ? 1.0 : 0.3;
         });
     }
     sunAngle() {

@@ -19,13 +19,29 @@ class Today {
 		return month + "/" + day;
 	}
 
-	imageFile() : string {
-		/*
-		let debug = true;
-		if (debug) {
-			return "12/21.jpg";
+	color() : number {
+		const td = this.textDate();
+
+		switch (td) {
+			case "6/23":
+			case "7/21":
+			case "9/15":
+				return 0x9f30db;
+			case "6/24":
+			case "11/24":
+				return 0xdb3030;
+			case "8/1":
+				return 0xcfbc93;
 		}
-		*/
+
+		return 0xcfbc93;
+	}
+
+	imageFile() : string {
+		let debug = false; // location.hostname === "localhost" ? true : false;
+		if (debug) {
+			return "2/10.jpg";
+		}
 
 		return this.textDate() + ".jpg";
 	}
@@ -49,6 +65,11 @@ class Today {
 	isNight() : boolean {
 		const hours = this.currentHours();
 		return hours < this._sunrise || hours >= this._sunset;
+	}
+
+	isSunset() : boolean {
+		const hours = this.currentHours();
+		return hours === this._sunset - 1;
 	}
 
 	currentHours() : number {
