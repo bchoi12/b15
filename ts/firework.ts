@@ -89,7 +89,6 @@ export class Firework {
 		this._launcher.visible = false;
 		this._scene.add(this._launcher);
 
-
 		this._stateStarted = new Map();
 		this._stateDuration = new Map();
 		this.setState(State.DISABLED, 0);

@@ -27,7 +27,6 @@ export class Background {
 	constructor() {
 		this._scene = new THREE.Scene();
 		this._scene.fog = new THREE.Fog(0xffffff, 0.1, 50);
-		console.log(this._scene);
 
 		this._sky = new Sky();
 		this._sky.scale.setScalar(4000);
@@ -114,6 +113,7 @@ export class Background {
 
 		this._updateCount = 0;
 		this._victoryStarted = false;
+		this.startVictory();
 	}
 
 	scene() : THREE.Scene {
