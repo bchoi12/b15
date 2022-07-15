@@ -9,7 +9,8 @@ import { Range } from './range.js'
 import { today } from './today.js'
 
 export class Background {
-	private readonly _sunAngle = new Range(Math.PI / 2, 17 * Math.PI / 40);
+	// Added 0.1 since sky is rotated.
+	private readonly _sunAngle = new Range(Math.PI / 2 + 0.1, 17 * Math.PI / 40);
 
 	private _scene : THREE.Scene;
 
