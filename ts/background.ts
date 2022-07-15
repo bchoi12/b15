@@ -114,7 +114,6 @@ export class Background {
 
 		this._updateCount = 0;
 		this._victoryStarted = false;
-		this.startVictory();
 	}
 
 	scene() : THREE.Scene {
