@@ -26,3 +26,19 @@ Same as above, but at night
 ## Credits
 
 I used [smartcrop.js](https://github.com/jwagner/smartcrop.js/) to automatically crop portrait and landscape photos to a square and I used [three.js](https://threejs.org/) for rendering basically everything. All other code is written using TypeScript and compiled with Webpack. The puzzle is hosted on github pages and can be accessed [here](https://brianchoi.net/b15/).
+
+## Dev Notes
+
+```
+# install stuff
+npm install
+
+# compile javascript
+tsc
+
+# package javascript
+npx webpack
+
+# run local server
+http-server dist
+```

@@ -16,8 +16,8 @@ export class Board {
 	private readonly _baseUrl = "https://raw.githubusercontent.com/bchoi12/img_server/main/"
 
 	private readonly _shuffleMoves : number = 250;
-	private readonly _boardLength : number = 4;
-	private readonly _pieceSize : number = 3;
+	private readonly _boardLength : number = 3;
+	private readonly _pieceSize : number = 4;
 
 	private readonly _boardSize : number = this._boardLength * this._boardLength;
 	private readonly _emptyValue : number = this._boardSize - 1;
@@ -328,8 +328,8 @@ export class Board {
 	}
 
 	private getIndexFromPos(pos : THREE.Vector3) : number {
-		const row = Math.floor((2 * this._pieceSize - pos.y) / this._pieceSize)
-		const col = Math.floor((pos.x + this._boardLength / 2 * this._pieceSize) / this._pieceSize);
+		const row = Math.floor((-pos.y + this._boardLength * this._pieceSize / 2) / this._pieceSize);
+		const col = Math.floor((pos.x + this._boardLength * this._pieceSize / 2) / this._pieceSize);
 
 		if (row < 0 || row >= this._boardLength || col < 0 || col >= this._boardLength) {
 			return -1;
@@ -340,7 +340,7 @@ export class Board {
 
 	private getPos(index : number) : THREE.Vector3 {
 		const [row, col] = this.getRowCol(index);
-		const x = this._pieceSize * col - this._pieceSize * this._pieceSize / 2;
+		const x = this._pieceSize * col - this._boardLength * this._pieceSize / 2 + this._pieceSize / 2;
 		const y = (this._boardLength / 2 - row) * this._pieceSize - this._pieceSize / 2;
 		return new THREE.Vector3(x, y, 0);
 	}
